@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slarof - Майнкрафт Сервер</title>
+    <!-- Пиксельный шрифт Minecraft -->
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+    <style>
+        :root {
+            --mc-bg: #c6c6c6;
+            --mc-border-light: #ffffff;
+            --mc-border-dark: #555555;
+            --mc-text: #333333;
+            --mc-hover: #9eb5ec;
+            --mc-tooltip-bg: #110111;
+            --mc-tooltip-border: #280428;
+            --mc-tooltip-title: #ffffff;
+        }
+
+        body {
+            /* Фон стилизованный под бедрок/камень */
+            background-color: #2b2b2b;
+            background-image: radial-gradient(#111 15%, transparent 16%), radial-gradient(#111 15%, transparent 16%);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            color: #ffffff;
+            font-family: 'Minecraft', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        /* Главный контейнер инвентаря */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--mc-bg);
+            border: 4px solid #000;
+            box-shadow: inset 4px 4px 0 var(--mc-border-light), inset -4px -4px 0 var(--mc-border-dark);
+            padding: 20px;
+            color: var(--mc-text);
+        }
+
+        h1 {
+            text-align: center;
+            color: #444;
+            text-shadow: 2px 2px 0 #fff;
+            font-size: 3rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #111;
+            text-shadow: 1px 1px 0 #fff;
+            font-size: 1.8rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #555;
+            padding-bottom: 5px;
+        }
+
+        /* Навигация (вкладки) */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #000;
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: var(--mc-bg);
+            border: 4px solid;
+            border-color: var(--mc-border-light) var(--mc-border-dark) var(--mc-border-dark) var(--mc-border-light);
+            color: #000;
+            font-family: 'Minecraft', sans-serif;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background-color: var(--mc-hover);
+        }
+
+        .tab-btn:active {
+            /* Эффект нажатия майнкрафт-кнопки */
+            border-color: var(--mc-border-dark) var(--mc-border-light) var(--mc-border-light) var(--mc-border-dark);
+            padding: 12px 18px 8px 22px;
+        }
+
+        /* Содержимое вкладок */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: #8b8b8b;
+            border: 4px solid;
+            border-color: var(--mc-border-dark) var(--mc-border-light) var(--mc-border-light) var(--mc-border-dark);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h2 {
+            margin-top: 0;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* Стилизация раздела правил */
+        .rules-warning {
+            background-color: #aa0000;
+            color: #fff;
+            border: 4px solid #000;
+            box-shadow: inset 3px 3px 0 #ff5555, inset -3px -3px 0 #550000;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 1.1rem;
+        }
+
+        .rules-btn-link {
+            display: inline-block;
+            background-color: #555555;
+            color: #fff;
+            border: 4px solid #000;
+            box-shadow: inset 3px 3px 0 #aaa, inset -3px -3px 0 #222;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 25px;
+            transition: background-color 0.2s;
+        }
+
+        .rules-btn-link:hover {
+            background-color: #4cd137;
+            box-shadow: inset 3px 3px 0 #a2f389, inset -3px -3px 0 #217011;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rules-list li {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-left: 6px solid #ffaa00;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .rules-list li strong {
+            color: #ff5555;
+        }
+
+        /* Кнопки скачивания модов */
+        .downloads {
+            display: flex;
+            gap: 20px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .download-btn {
+            display: inline-block;
+            color: #fff;
+            border: 4px solid #000;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #000;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .fabric-btn {
+            background-color: #3c8527;
+            box-shadow: inset 3px 3px 0 #5cbb40, inset -3px -3px 0 #204e12;
+        }
+
+        .fabric-btn:hover {
+            background-color: #4cd137;
+            box-shadow: inset 3px 3px 0 #a2f389, inset -3px -3px 0 #217011;
+        }
+
+        .forge-btn {
+            background-color: #d35400;
+            box-shadow: inset 3px 3px 0 #e67e22, inset -3px -3px 0 #873600;
+        }
+
+        .forge-btn:hover {
+            background-color: #e67e22;
+            box-shadow: inset 3px 3px 0 #f39c12, inset -3px -3px 0 #a04000;
+        }
+
+        /* Сетка модов */
+        .mods-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mod-item {
+            background-color: var(--mc-bg);
+            border: 4px solid;
+            border-color: var(--mc-border-light) var(--mc-border-dark) var(--mc-border-dark) var(--mc-border-light);
+            padding: 15px;
+            position: relative;
+            cursor: default;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .mod-item span {
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .mod-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 5px;
+            background-color: rgba(17, 1, 17, 0.95);
+            border: 3px solid var(--mc-tooltip-border);
+            border-radius: 4px;
+            padding: 12px;
+            width: 350px;
+            z-index: 100;
+            pointer-events: none;
+            font-weight: normal;
+            font-family: 'Minecraft', sans-serif;
+            text-align: left;
+        }
+
+        .mod-item:hover .mod-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .mod-tooltip-title {
+            color: var(--mc-tooltip-title);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .mod-tooltip-desc {
+            color: #55FFFF;
+            font-size: 1rem;
+            line-height: 1.4;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .ip-box {
+            display: inline-block;
+            background-color: #000;
+            color: #55ff55;
+            padding: 15px 30px;
+            border: 4px solid #555;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-top: 20px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .ip-box:hover {
+            border-color: #fff;
+        }
+
+        .ip-hint {
+            display: block;
+            color: #fff;
+            font-size: 1rem;
+            margin-top: 10px;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        p, ul {
+            color: #fff; 
+            text-shadow: 2px 2px 0 #000; 
+            font-size: 1.2rem; 
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SLAROF</h1>
+
+        <!-- Навигация -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('home', event)">Главная</button>
+            <button class="tab-btn" onclick="openTab('rules', event)">Правила</button>
+            <button class="tab-btn" onclick="openTab('mods', event)">Сборка Модов</button>
+        </div>
+
+        <!-- Раздел: Главная -->
+        <div id="home" class="tab-content active">
+            <h2>Добро пожаловать!</h2>
+            <p>
+                Здесь начинается твоё выживание. Только классический и суровый Майнкрафт опыт. 
+                Подключайся, выживай и строй свою историю!
+            </p>
+            <div style="text-align: center;">
+                <div class="ip-box" onclick="copyIP()">
+                    slarof.ru
+                </div>
+                <span class="ip-hint" id="ip-hint">Нажми, чтобы скопировать IP</span>
+            </div>
+        </div>
+
+        <!-- Раздел: Правила -->
+        <div id="rules" class="tab-content">
+            <h2>Правила сервера</h2>
+            
+            <div class="rules-warning">
+                ⚠️ Незнание правил не освобождает от ответственности!<br>
+                Каждый игрок несет полную ответственность за свой аккаунт (в том числе за действия, совершенные с него другими людьми).
+            </div>
+
+            <div style="text-align: center;">
+                <a href="https://docs.google.com/document/d/1Krl_F8kYzGgLt07YEO0GomHLQOUVSua8QFfAzcZ-J_Y/mobilebasic" target="_blank" class="rules-btn-link">
+                    Открыть полные правила сервера
+                </a>
+            </div>
+
+            <p style="color: #ffaa00; font-weight: bold; margin-bottom: 10px;">Краткие правила:</p>
+            
+            <ul class="rules-list">
+                <li><strong>[Гриферство]</strong> Запрещено разрушать, портить или изменять постройки и фермы других игроков без их разрешения.</li>
+                <li><strong>[Кражи]</strong> Запрещено воровать вещи, ресурсы, мобов или любые предметы из сундуков и построек (даже если они выглядят ненужными).</li>
+                <li><strong>[PVP]</strong> Запрещено убивать игроков или их мобов на их приватной территории.</li>
+                <li><strong>[Чит-программы]</strong> Запрещено использовать читы, баги, x-ray, fly, kill-aura и любые другие модификации, дающие преимущество.</li>
+                <li><strong>[Дискриминация]</strong> Запрещено продвигать идеологии, основанные на расовой, этнической, религиозной или национальной ненависти (расизм, нацизм, ксенофобия, оправдание войны в Украине и т.д.).</li>
+                <li><strong>[Токсичность]</strong> Запрещено разжигать конфликты, оскорблять, спамить, флудить или хейтить игроков в общем чате и на постройках.</li>
+                <li><strong>[Реклама]</strong> Запрещено рекламировать другие серверы, каналы, сайты и услуги без разрешения администрации.</li>
+                <li><strong>[Выдача за персонал]</strong> Запрещено выдавать себя за других игроков или администрацию сервера.</li>
+            </ul>
+        </div>
+
+        <!-- Раздел: Моды -->
+        <div id="mods" class="tab-content">
+            <h2>Готовые сборки</h2>
+            <p>Для комфортной игры мы подготовили готовые архивы с модами. Выберите вашу версию загрузчика и скачайте:</p>
+            
+            <div class="downloads">
+                <a href="СЮДА_ССЫЛКУ_НА_FABRIC" class="download-btn fabric-btn" target="_blank">
+                    Скачать Fabric<br><span style="font-size: 0.9rem; color: #d1ffd1;">(Рекомендуется)</span>
+                </a>
+                <a href="СЮДА_ССЫЛКУ_НА_NEOFORGE" class="download-btn forge-btn" target="_blank">
+                    Скачать NeoForge
+                </a>
+            </div>
+
+            <p style="margin-top: 30px;">Наведи курсор на мод ниже, чтобы узнать его назначение:</p>
+            
+            <h3>Fabric (Рекомендуется)</h3>
+            <div class="mods-grid">
+                <div class="mod-item"><span>Advancements Reloaded</span><div class="mod-tooltip"><div class="mod-tooltip-title">Advancements Reloaded</div><div class="mod-tooltip-desc">Полностью перерабатывает интерфейс достижений, делая его более удобным.</div></div></div>
+                <div class="mod-item"><span>Dream Displays</span><div class="mod-tooltip"><div class="mod-tooltip-title">Dream Displays</div><div class="mod-tooltip-desc">Позволяет создавать кастомные голографические экраны и дисплеи в мире.</div></div></div>
+                <div class="mod-item"><span>Emotecraft</span><div class="mod-tooltip"><div class="mod-tooltip-title">Emotecraft</div><div class="mod-tooltip-desc">Добавляет плавные анимации и эмоции для вашего персонажа. Можно танцевать!</div></div></div>
+                <div class="mod-item"><span>Entity Model Features</span><div class="mod-tooltip"><div class="mod-tooltip-title">Entity Model Features</div><div class="mod-tooltip-desc">Включает поддержку пользовательских моделей мобов, работая как аналог фишек OptiFine.</div></div></div>
+                <div class="mod-item"><span>Entity Texture Features</span><div class="mod-tooltip"><div class="mod-tooltip-title">Entity Texture Features</div><div class="mod-tooltip-desc">Добавляет поддержку рандомных и светящихся текстур для мобов (как в OptiFine).</div></div></div>
+                <div class="mod-item"><span>Female Gender Mod</span><div class="mod-tooltip"><div class="mod-tooltip-title">Female Gender Mod</div><div class="mod-tooltip-desc">Добавляет настраиваемые женские модели и формы для персонажей.</div></div></div>
+                <div class="mod-item"><span>Locator Heads</span><div class="mod-tooltip"><div class="mod-tooltip-title">Locator Heads</div><div class="mod-tooltip-desc">Показывает головы друзей на краях экрана, чтобы вы легко могли найти друг друга.</div></div></div>
+                <div class="mod-item"><span>Mod Menu</span><div class="mod-tooltip"><div class="mod-tooltip-title">Mod Menu</div><div class="mod-tooltip-desc">Добавляет удобное меню в игру для просмотра списка установленных модов и их настроек.</div></div></div>
+                <div class="mod-item"><span>ModSync</span><div class="mod-tooltip"><div class="mod-tooltip-title">ModSync</div><div class="mod-tooltip-desc">Синхронизирует нужные моды клиента с сервером для стабильной игры.</div></div></div>
+                <div class="mod-item"><span>Panorandom</span><div class="mod-tooltip"><div class="mod-tooltip-title">Panorandom</div><div class="mod-tooltip-desc">Случайные красивые панорамы при входе в главное меню игры.</div></div></div>
+                <div class="mod-item"><span>ResourcePackCached</span><div class="mod-tooltip"><div class="mod-tooltip-title">ResourcePackCached</div><div class="mod-tooltip-desc">Ускоряет загрузку ресурспаков за счет их кэширования на ПК.</div></div></div>
+                <div class="mod-item"><span>Resource Packs Fusion</span><div class="mod-tooltip"><div class="mod-tooltip-title">Resource Packs Fusion</div><div class="mod-tooltip-desc">Позволяет гибко настраивать и объединять различные ресурспаки без конфликтов.</div></div></div>
+                <div class="mod-item"><span>RPRenames</span><div class="mod-tooltip"><div class="mod-tooltip-title">RPRenames</div><div class="mod-tooltip-desc">Поддержка кастомных имен предметов, которые меняют их текстуру (на основе ресурспаков).</div></div></div>
+                <div class="mod-item"><span>Shulker Box Tooltip</span><div class="mod-tooltip"><div class="mod-tooltip-title">Shulker Box Tooltip</div><div class="mod-tooltip-desc">Показывает содержимое шалкера прямо в инвентаре при наведении на него курсора.</div></div></div>
+                <div class="mod-item"><span>Simple Voice Chat</span><div class="mod-tooltip"><div class="mod-tooltip-title">Simple Voice Chat</div><div class="mod-tooltip-desc">Внутриигровой пространственный голосовой чат.</div></div></div>
+                <div class="mod-item"><span>Voice Messages</span><div class="mod-tooltip"><div class="mod-tooltip-title">Voice Messages</div><div class="mod-tooltip-desc">Возможность отправлять записанные голосовые сообщения прямо в текстовый чат.</div></div></div>
+                <div class="mod-item"><span>Webcam</span><div class="mod-tooltip"><div class="mod-tooltip-title">Webcam</div><div class="mod-tooltip-desc">Позволяет транслировать изображение с вашей реальной веб-камеры в игру.</div></div></div>
+            </div>
+
+            <h3>NeoForge</h3>
+            <div class="mods-grid">
+                <div class="mod-item"><span>Advancements Reloaded</span><div class="mod-tooltip"><div class="mod-tooltip-title">Advancements Reloaded</div><div class="mod-tooltip-desc">Полностью перерабатывает интерфейс достижений (порт на NeoForge).</div></div></div>
+                <div class="mod-item"><span>Dream Displays</span><div class="mod-tooltip"><div class="mod-tooltip-title">Dream Displays</div><div class="mod-tooltip-desc">Позволяет создавать кастомные голографические экраны и дисплеи.</div></div></div>
+                <div class="mod-item"><span>Emotecraft</span><div class="mod-tooltip"><div class="mod-tooltip-title">Emotecraft</div><div class="mod-tooltip-desc">Добавляет плавные анимации и эмоции для вашего персонажа.</div></div></div>
+                <div class="mod-item"><span>Entity Model Features</span><div class="mod-tooltip"><div class="mod-tooltip-title">Entity Model Features</div><div class="mod-tooltip-desc">Поддержка кастомных моделей мобов (аналог OptiFine).</div></div></div>
+                <div class="mod-item"><span>Entity Texture Features</span><div class="mod-tooltip"><div class="mod-tooltip-title">Entity Texture Features</div><div class="mod-tooltip-desc">Поддержка кастомных и светящихся текстур для мобов.</div></div></div>
+                <div class="mod-item"><span>Locator Bar</span><div class="mod-tooltip"><div class="mod-tooltip-title">Locator Bar</div><div class="mod-tooltip-desc">Показывает компас/бар с иконками игроков для упрощения поиска друзей.</div></div></div>
+                <div class="mod-item"><span>Shulker Box Tooltip</span><div class="mod-tooltip"><div class="mod-tooltip-title">Shulker Box Tooltip</div><div class="mod-tooltip-desc">Показывает содержимое шалкера в инвентаре.</div></div></div>
+                <div class="mod-item"><span>Simple Voice Chat</span><div class="mod-tooltip"><div class="mod-tooltip-title">Simple Voice Chat</div><div class="mod-tooltip-desc">Внутриигровой пространственный голосовой чат.</div></div></div>
+                <div class="mod-item"><span>Voice Messages</span><div class="mod-tooltip"><div class="mod-tooltip-title">Voice Messages</div><div class="mod-tooltip-desc">Возможность отправлять голосовые сообщения в чат.</div></div></div>
+                <div class="mod-item"><span>Webcam</span><div class="mod-tooltip"><div class="mod-tooltip-title">Webcam</div><div class="mod-tooltip-desc">Трансляция веб-камеры прямо в игру.</div></div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Скрипты -->
+    <script>
+        function openTab(tabId, event) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyIP() {
+            const ip = "slarof.ru";
+            navigator.clipboard.writeText(ip).then(() => {
+                const hint = document.getElementById("ip-hint");
+                hint.innerText = "IP скопирован в буфер!";
+                hint.style.color = "#55ff55";
+                
+                setTimeout(() => {
+                    hint.innerText = "Нажми, чтобы скопировать IP";
+                    hint.style.color = "#fff";
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка:', err);
+            });
+        }
+    </script>
+</body>
+</html>
