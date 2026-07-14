@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slarof - Майнкрафт Сервер</title>
-    <!-- Пиксельный шрифт Minecraft -->
+    <!-- Классический шрифт Minecraft для заголовков и кнопок -->
     <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+    <!-- Идеально читаемый современный шрифт для основного текста -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --mc-bg: #c6c6c6;
@@ -19,18 +21,27 @@
         }
 
         body {
-            /* Фон стилизованный под бедрок/камень */
-            background-color: #2b2b2b;
-            background-image: radial-gradient(#111 15%, transparent 16%), radial-gradient(#111 15%, transparent 16%);
-            background-size: 32px 32px;
-            background-position: 0 0, 16px 16px;
+            /* НАСТРОЙКА ФОНА: Замените ссылку внутри url() на свою картинку или путь к файлу */
+            background-image: linear-gradient(rgba(20, 20, 25, 0.75), rgba(20, 20, 25, 0.75)), url('https://imgur.com/a/oFBXDZj');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #2b2b2b; /* Цвет, если картинка не загрузится */
+            
             color: #ffffff;
-            font-family: 'Minecraft', sans-serif;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
             margin: 0;
             padding: 40px 20px;
+            line-height: 1.6;
         }
 
-        /* Главный контейнер инвентаря */
+        /* Заголовки и кнопки оставляем в стиле Minecraft */
+        h1, h2, h3, .tab-btn, .rules-btn-link, .download-btn, .ip-box {
+            font-family: 'Minecraft', sans-serif;
+            font-weight: normal;
+        }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -45,22 +56,29 @@
             text-align: center;
             color: #444;
             text-shadow: 2px 2px 0 #fff;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            line-height: 1.4;
         }
 
         h3 {
             color: #111;
             text-shadow: 1px 1px 0 #fff;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-top: 30px;
             margin-bottom: 15px;
-            border-bottom: 2px solid #555;
-            padding-bottom: 5px;
+            border-bottom: 3px solid #555;
+            padding-bottom: 10px;
         }
 
-        /* Навигация (вкладки) */
         .tabs {
             display: flex;
             gap: 10px;
@@ -75,9 +93,8 @@
             border: 4px solid;
             border-color: var(--mc-border-light) var(--mc-border-dark) var(--mc-border-dark) var(--mc-border-light);
             color: #000;
-            font-family: 'Minecraft', sans-serif;
             font-size: 1.2rem;
-            padding: 10px 20px;
+            padding: 12px 20px;
             cursor: pointer;
             text-shadow: 1px 1px 0 #fff;
         }
@@ -87,15 +104,13 @@
         }
 
         .tab-btn:active {
-            /* Эффект нажатия майнкрафт-кнопки */
             border-color: var(--mc-border-dark) var(--mc-border-light) var(--mc-border-light) var(--mc-border-dark);
-            padding: 12px 18px 8px 22px;
+            padding: 14px 18px 10px 22px;
         }
 
-        /* Содержимое вкладок */
         .tab-content {
             display: none;
-            padding: 20px;
+            padding: 25px;
             background-color: #8b8b8b;
             border: 4px solid;
             border-color: var(--mc-border-dark) var(--mc-border-light) var(--mc-border-light) var(--mc-border-dark);
@@ -105,22 +120,115 @@
             display: block;
         }
 
-        .tab-content h2 {
+        /* Блоки на главной и ссылках */
+        .info-block {
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 2px solid #555;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .info-block p, .info-block ul li {
+            color: #eee;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.8);
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+        }
+        
+        .info-block h3 {
+            color: #ffaa00;
+            border-bottom: none;
             margin-top: 0;
-            color: #fff;
+            margin-bottom: 15px;
             text-shadow: 2px 2px 0 #000;
         }
 
-        /* Стилизация раздела правил */
+        /* Социальные ссылки и кнопки ресурсов */
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            flex-direction: column;
+            background-color: #555;
+            color: #fff;
+            border: 4px solid #000;
+            box-shadow: inset 3px 3px 0 #999, inset -3px -3px 0 #333;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #000;
+            transition: all 0.2s;
+            font-family: 'Minecraft', sans-serif;
+        }
+
+        .social-links a:hover {
+            background-color: #ffaa00;
+            box-shadow: inset 3px 3px 0 #ffcc00, inset -3px -3px 0 #996600;
+            color: #000;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .social-links .desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: #ddd;
+            display: block;
+            margin-top: 5px;
+            text-shadow: 1px 1px 0 #000;
+            font-weight: 500;
+        }
+        .social-links a:hover .desc { 
+            color: #222; 
+            text-shadow: none;
+        }
+
+        /* Кнопка IP */
+        .ip-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .ip-box {
+            display: inline-block;
+            background-color: #000;
+            color: #55ff55;
+            padding: 15px 30px;
+            border: 4px solid #555;
+            font-size: 1.5rem;
+            cursor: pointer;
+            text-shadow: 2px 2px 0 #000;
+            transition: border-color 0.2s;
+        }
+
+        .ip-box:hover { border-color: #fff; }
+
+        .ip-hint {
+            display: block;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            margin-top: 10px;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        /* Раздел правил */
         .rules-warning {
             background-color: #aa0000;
             color: #fff;
             border: 4px solid #000;
             box-shadow: inset 3px 3px 0 #ff5555, inset -3px -3px 0 #550000;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0 #000;
-            font-size: 1.1rem;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 0 #000;
+            font-size: 1.15rem;
+            font-weight: 600;
         }
 
         .rules-btn-link {
@@ -129,7 +237,7 @@
             color: #fff;
             border: 4px solid #000;
             box-shadow: inset 3px 3px 0 #aaa, inset -3px -3px 0 #222;
-            padding: 12px 24px;
+            padding: 15px 25px;
             text-decoration: none;
             font-size: 1.2rem;
             text-shadow: 2px 2px 0 #000;
@@ -149,21 +257,20 @@
         }
 
         .rules-list li {
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.4);
             border-left: 6px solid #ffaa00;
-            padding: 12px 15px;
-            margin-bottom: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
             color: #fff;
-            text-shadow: 2px 2px 0 #000;
-            font-size: 1.1rem;
-            line-height: 1.5;
+            text-shadow: 1px 1px 0 #000;
+            font-size: 1.15rem;
+        }
+        .rules-list li strong { 
+            color: #ff5555; 
+            font-weight: 700;
         }
 
-        .rules-list li strong {
-            color: #ff5555;
-        }
-
-        /* Кнопки скачивания модов */
+        /* Кнопки скачивания */
         .downloads {
             display: flex;
             gap: 20px;
@@ -173,18 +280,19 @@
         }
 
         .download-btn {
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             color: #fff;
             border: 4px solid #000;
-            padding: 15px 30px;
+            padding: 15px;
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             text-shadow: 2px 2px 0 #000;
             cursor: pointer;
             text-align: center;
             flex: 1;
             min-width: 250px;
-            max-width: 400px;
             transition: background-color 0.2s, box-shadow 0.2s;
         }
 
@@ -192,7 +300,6 @@
             background-color: #3c8527;
             box-shadow: inset 3px 3px 0 #5cbb40, inset -3px -3px 0 #204e12;
         }
-
         .fabric-btn:hover {
             background-color: #4cd137;
             box-shadow: inset 3px 3px 0 #a2f389, inset -3px -3px 0 #217011;
@@ -202,7 +309,6 @@
             background-color: #d35400;
             box-shadow: inset 3px 3px 0 #e67e22, inset -3px -3px 0 #873600;
         }
-
         .forge-btn:hover {
             background-color: #e67e22;
             box-shadow: inset 3px 3px 0 #f39c12, inset -3px -3px 0 #a04000;
@@ -222,13 +328,14 @@
             padding: 15px;
             position: relative;
             cursor: default;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #000;
         }
 
         .mod-item span {
+            font-family: 'Minecraft', sans-serif;
+            font-size: 1.2rem;
+            color: #000;
             text-shadow: 1px 1px 0 #fff;
+            display: block;
         }
 
         .mod-tooltip {
@@ -238,16 +345,14 @@
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            margin-top: 5px;
+            margin-top: 8px;
             background-color: rgba(17, 1, 17, 0.95);
             border: 3px solid var(--mc-tooltip-border);
             border-radius: 4px;
-            padding: 12px;
-            width: 350px;
+            padding: 15px;
+            width: 320px;
             z-index: 100;
             pointer-events: none;
-            font-weight: normal;
-            font-family: 'Minecraft', sans-serif;
             text-align: left;
         }
 
@@ -258,6 +363,7 @@
 
         .mod-tooltip-title {
             color: var(--mc-tooltip-title);
+            font-family: 'Minecraft', sans-serif;
             font-size: 1.2rem;
             margin-bottom: 8px;
             text-shadow: 2px 2px 0 #000;
@@ -265,40 +371,15 @@
 
         .mod-tooltip-desc {
             color: #55FFFF;
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             line-height: 1.4;
-            text-shadow: 2px 2px 0 #000;
-        }
-
-        .ip-box {
-            display: inline-block;
-            background-color: #000;
-            color: #55ff55;
-            padding: 15px 30px;
-            border: 4px solid #555;
-            font-size: 1.5rem;
-            cursor: pointer;
-            margin-top: 20px;
-            text-shadow: 2px 2px 0 #000;
-        }
-
-        .ip-box:hover {
-            border-color: #fff;
-        }
-
-        .ip-hint {
-            display: block;
-            color: #fff;
-            font-size: 1rem;
-            margin-top: 10px;
             text-shadow: 1px 1px 0 #000;
         }
 
         p, ul {
             color: #fff; 
-            text-shadow: 2px 2px 0 #000; 
-            font-size: 1.2rem; 
-            line-height: 1.6;
+            text-shadow: 1px 1px 0 #000; 
         }
     </style>
 </head>
@@ -311,21 +392,36 @@
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab('home', event)">Главная</button>
             <button class="tab-btn" onclick="openTab('rules', event)">Правила</button>
-            <button class="tab-btn" onclick="openTab('mods', event)">Сборки Модов</button>
+            <button class="tab-btn" onclick="openTab('mods', event)">Сборки модов</button>
+            <button class="tab-btn" onclick="openTab('resourcepacks', event)">Ресурспаки</button>
+            <button class="tab-btn" onclick="openTab('links', event)">Ссылки</button>
         </div>
 
         <!-- Раздел: Главная -->
         <div id="home" class="tab-content active">
-            <h2>Добро пожаловать!</h2>
-            <p>
-                Здесь начинается твоё выживание. Только классический и суровый Майнкрафт опыт. 
-                Подключайся, выживай и строй свою историю!
-            </p>
-            <div style="text-align: center;">
+            
+            <div class="info-block">
+                <h2>Добро пожаловать!</h2>
+                <p>
+                    Приветствуем на сервере Slarof! Это Minecraft сервер по выживанию, основанный 13 июня 2022 года. 
+                    Надеемся, что Вы сможете найти для себя местечко, новые знакомства и хорошие впечатления!
+                </p>
+            </div>
+
+            <div class="ip-container">
                 <div class="ip-box" onclick="copyIP()">
                     slarof.ru
                 </div>
                 <span class="ip-hint" id="ip-hint">Нажми, чтобы скопировать IP</span>
+            </div>
+
+            <div class="info-block">
+                <h3>Наши цели:</h3>
+                <ul>
+                    <li>Сделать место, на котором было бы интересно и приятно играть. Предоставить основной контент всем, а не лишь платежеспособным.</li>
+                    <li>Показать комьюнити Minecraft, что некоторые вещи можно реализовать своими руками, не ожидая этого от компании Mojang Studio.</li>
+                    <li>Разрабатывать датапаки, основываясь на обратной связи. В дальнейшем некоторые из них могут стать вкладом в комьюнити Minecraft.</li>
+                </ul>
             </div>
         </div>
 
@@ -339,40 +435,41 @@
             </div>
 
             <div style="text-align: center;">
-                <a href="https://docs.google.com/document/d/1Krl_F8kYzGgLt07YEO0GomHLQOUVSua8QFfAzcZ-J_Y/mobilebasic" target="_blank" class="rules-btn-link">
-                    Открыть полные правила сервера
+                <a href="https://docs.google.com/document/d/1Krl_F8kYzGgLt07YEO0GomHLQOUVSua8QFfAzcZ-J_Y" target="_blank" class="rules-btn-link">
+                    Открыть полные правила
                 </a>
             </div>
 
-            <p style="color: #ffaa00; font-weight: bold; margin-bottom: 10px;">Краткие правила:</p>
+            <p style="color: #ffaa00; margin-bottom: 15px; font-size: 1.3rem; font-weight: bold;">Краткая сводка:</p>
             
             <ul class="rules-list">
                 <li><strong>[Гриферство]</strong> Запрещено разрушать, портить или изменять постройки и фермы других игроков без их разрешения.</li>
                 <li><strong>[Кражи]</strong> Запрещено воровать вещи, ресурсы, мобов или любые предметы из сундуков и построек (даже если они выглядят ненужными).</li>
                 <li><strong>[PVP]</strong> Запрещено убивать игроков или их мобов на их приватной территории.</li>
                 <li><strong>[Чит-программы]</strong> Запрещено использовать читы, баги, x-ray, fly, kill-aura и любые другие модификации, дающие преимущество.</li>
-                <li><strong>[Дискриминация]</strong> Запрещено продвигать идеологии, основанные на расовой, этнической, религиозной или национальной ненависти (расизм, нацизм, ксенофобия, оправдание войны в Украине и т.д.).</li>
-                <li><strong>[Токсичность]</strong> Запрещено разжигать конфликты, оскорблять, спамить, флудить или хейтить игроков в общем чате и на постройках.</li>
-                <li><strong>[Реклама]</strong> Запрещено рекламировать другие серверы, каналы, сайты и услуги без разрешения администрации.</li>
-                <li><strong>[Выдача за персонал]</strong> Запрещено выдавать себя за других игроков или администрацию сервера.</li>
+                <li><strong>[Дискриминация]</strong> Запрещено продвигать идеологии, основанные на ненависти (расизм, нацизм, ксенофобия, оправдание войны и т.д.).</li>
+                <li><strong>[Токсичность]</strong> Запрещено разжигать конфликты, оскорблять, спамить, флудить или хейтить игроков.</li>
+                <li><strong>[Реклама]</strong> Запрещено рекламировать другие серверы, сайты и услуги без разрешения.</li>
+                <li><strong>[Выдача себя за других]</strong> Запрещено выдавать себя за других игроков или администрацию.</li>
             </ul>
         </div>
 
         <!-- Раздел: Моды -->
         <div id="mods" class="tab-content">
             <h2>Готовые сборки</h2>
-            <p>Для комфортной игры мы подготовили готовые архивы с модами. Выберите вашу версию загрузчика и скачайте:</p>
+            <p>Для комфортной игры мы подготовили архивы с модами. Выберите вашу версию загрузчика:</p>
             
             <div class="downloads">
-                <a href="https://github.com/SlarofMC/Slarof_Modpacks/releases/download/26.2/Slarof_Modpack-fabric-26.2.zip" class="download-btn fabric-btn" target="_blank">
-                    Скачать Fabric<br><span style="font-size: 0.9rem; color: #d1ffd1;">(Рекомендуется)</span>
+                <a href="СЮДА_ССЫЛКУ_НА_FABRIC" class="download-btn fabric-btn" target="_blank">
+                    Скачать Fabric
+                    <span style="font-family: 'Inter', sans-serif; font-size: 0.95rem; color: #d1ffd1; text-shadow: none; margin-top: 5px;">(Рекомендуется)</span>
                 </a>
-                <a href="https://github.com/SlarofMC/Slarof_Modpacks/releases/download/26.2/Slarof_Modpack-neoforge-26.2.zip" class="download-btn forge-btn" target="_blank">
+                <a href="СЮДА_ССЫЛКУ_НА_NEOFORGE" class="download-btn forge-btn" target="_blank">
                     Скачать NeoForge
                 </a>
             </div>
 
-            <p style="margin-top: 30px;">Наведи курсор на мод ниже, чтобы узнать его назначение:</p>
+            <p style="margin-top: 35px; color: #ffaa00; font-weight: 600;">Наведи курсор на мод, чтобы узнать его назначение:</p>
             
             <h3>Fabric (Рекомендуется)</h3>
             <div class="mods-grid">
@@ -407,6 +504,57 @@
                 <div class="mod-item"><span>Simple Voice Chat</span><div class="mod-tooltip"><div class="mod-tooltip-title">Simple Voice Chat</div><div class="mod-tooltip-desc">Внутриигровой пространственный голосовой чат.</div></div></div>
                 <div class="mod-item"><span>Voice Messages</span><div class="mod-tooltip"><div class="mod-tooltip-title">Voice Messages</div><div class="mod-tooltip-desc">Возможность отправлять голосовые сообщения в чат.</div></div></div>
                 <div class="mod-item"><span>Webcam</span><div class="mod-tooltip"><div class="mod-tooltip-title">Webcam</div><div class="mod-tooltip-desc">Трансляция веб-камеры прямо в игру.</div></div></div>
+            </div>
+        </div>
+
+        <!-- Раздел: Ресурспаки -->
+        <div id="resourcepacks" class="tab-content">
+            <h2>Ресурспаки сервера</h2>
+            <p>Для полного погружения и корректного отображения кастомных предметов на нашем сервере используются собственные ресурспаки.</p>
+            
+            <div class="info-block">
+                <div class="social-links">
+                    <a href="https://github.com/SlarofMC/KSEPSP-EcoEnchants/releases" target="_blank">
+                        KSEPSP & EcoEnchants
+                        <span class="desc">Ресурспак на Roleplay контент. Скачайте последнюю версию и поместите в папку resourcepacks.</span>
+                    </a>
+                    <a href="https://github.com/SlarofMC/Slarof_Additions" target="_blank">
+                        Slarof Additions
+                        <span class="desc">Ресурспак с дополнительным контентом для сервера.</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Раздел: Ссылки -->
+        <div id="links" class="tab-content">
+            <h2>Полезные ресурсы</h2>
+            <div class="info-block">
+                
+                <p style="margin-bottom:10px; color:#aaa; font-size: 0.95rem; text-transform: uppercase; font-weight: bold;">Социальные сети:</p>
+                <div class="social-links">
+                    <a href="https://www.youtube.com/@Slarofs" target="_blank">
+                        YouTube
+                        <span class="desc">Официальный канал сервера</span>
+                    </a>
+                    <a href="https://t.me/slarof" target="_blank">
+                        Telegram Канал
+                        <span class="desc">Новости и анонсы</span>
+                    </a>
+                    <a href="https://t.me/+X8r1yUuRloYxNGJi" target="_blank">
+                        Telegram Группа
+                        <span class="desc">Чат для общения игроков</span>
+                    </a>
+                    <a href="https://vk.com/slarof" target="_blank">
+                        ВКонтакте
+                        <span class="desc">Группа сервера</span>
+                    </a>
+                    <a href="https://vk.me/join/ID9HiR52on/Ana9P839BX8MuwS8K2Aft0ew=" target="_blank">
+                        Чат ВК
+                        <span class="desc">Беседа игроков во ВКонтакте</span>
+                    </a>
+                </div>
+
             </div>
         </div>
 
